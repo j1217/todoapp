@@ -1,20 +1,224 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>To-Do App</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <!-- ========================= -->
+  <!-- LOADING -->
+  <!-- ========================= -->
+  <div class="loading-container" *ngIf="isLoadingFirebase$ | async">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando configuración...</p>
   </div>
+
+  <div *ngIf="!(isLoadingFirebase$ | async)">
+
+    <!-- ========================= -->
+    <!-- TABS -->
+    <!-- ========================= -->
+    <ion-segment [(ngModel)]="currentTab" class="main-tabs">
+
+      <ion-segment-button value="tasks">
+        <ion-label>Tareas</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button *ngIf="showCategories$ | async" value="categories">
+        <ion-label>Categorías</ion-label>
+      </ion-segment-button>
+
+    </ion-segment>
+
+    <!-- ========================= -->
+    <!-- TAB: TASKS -->
+    <!-- ========================= -->
+    <div *ngIf="currentTab === 'tasks'">
+
+      <!-- ========================= -->
+      <!-- CARD: CREAR TAREA -->
+      <!-- ========================= -->
+      <ion-card class="card-create">
+
+        <ion-card-header>
+          <ion-card-title>📝 Nueva tarea</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+
+          <ion-item>
+            <ion-input
+              [(ngModel)]="newTaskTitle"
+              placeholder="Escribe una tarea...">
+            </ion-input>
+          </ion-item>
+
+          <ion-item *ngIf="showCategories$ | async">
+            <ion-label>Categoría</ion-label>
+
+            <ion-select [(ngModel)]="selectedCategoryForNewTask">
+
+              <ion-select-option [value]="null">
+                Sin categoría
+              </ion-select-option>
+
+              <ion-select-option
+                *ngFor="let cat of (categories$ | async); trackBy: trackById"
+                [value]="cat.id">
+
+                {{ cat.name }}
+
+              </ion-select-option>
+
+            </ion-select>
+          </ion-item>
+
+          <div class="actions">
+            <ion-button expand="block" (click)="addTask()">
+              Agregar tarea
+            </ion-button>
+          </div>
+
+        </ion-card-content>
+
+      </ion-card>
+
+      <!-- ========================= -->
+      <!-- SEPARADOR VISUAL -->
+      <!-- ========================= -->
+      <div class="section-divider">
+        <span>Listado de tareas</span>
+      </div>
+
+      <!-- ========================= -->
+      <!-- FILTROS -->
+      <!-- ========================= -->
+      <ion-segment *ngIf="showCategories$ | async" class="filters">
+
+        <ion-segment-button (click)="setCategory(null)">
+          <ion-label>Todas</ion-label>
+        </ion-segment-button>
+
+        <ion-segment-button (click)="setCategory('none')">
+          <ion-label>Sin categoría</ion-label>
+        </ion-segment-button>
+
+        <ion-segment-button
+          *ngFor="let cat of (categories$ | async); trackBy: trackById"
+          (click)="setCategory(cat.id)">
+
+          <ion-label>{{ cat.name }}</ion-label>
+
+        </ion-segment-button>
+
+      </ion-segment>
+
+      <!-- ========================= -->
+      <!-- LISTADO -->
+      <!-- ========================= -->
+      <ion-card class="card-list">
+
+        <ion-list>
+
+          <ion-item
+            *ngFor="let task of (filteredTasks$ | async); trackBy: trackById">
+
+            <ion-checkbox
+              slot="start"
+              [checked]="task.completed"
+              (ionChange)="toggleTask(task.id)">
+            </ion-checkbox>
+
+            <ion-label>
+
+              <h2 [class.completed]="task.completed">
+                {{ task.title }}
+              </h2>
+
+              <p>
+                {{ getCategoryName(task.categoryId, (categories$ | async) || []) }}
+              </p>
+
+            </ion-label>
+
+            <ion-button
+              fill="clear"
+              color="danger"
+              (click)="deleteTask(task.id)">
+
+              Eliminar
+
+            </ion-button>
+
+          </ion-item>
+
+        </ion-list>
+
+        <!-- EMPTY -->
+        <div class="empty-state"
+             *ngIf="(filteredTasks$ | async)?.length === 0">
+
+          <p>No hay tareas aún 🚀</p>
+
+        </div>
+
+      </ion-card>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- TAB: CATEGORIES -->
+    <!-- ========================= -->
+    <div *ngIf="currentTab === 'categories' && (showCategories$ | async)">
+
+      <ion-card>
+
+        <ion-card-header>
+          <ion-card-title>📂 Categorías</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+
+          <ion-item>
+            <ion-input
+              [(ngModel)]="newCategoryName"
+              placeholder="Nueva categoría...">
+            </ion-input>
+
+            <ion-button (click)="addCategory()">
+              Agregar
+            </ion-button>
+          </ion-item>
+
+          <ion-list>
+
+            <ion-item
+              *ngFor="let cat of (categories$ | async); trackBy: trackById">
+
+              <ion-label>{{ cat.name }}</ion-label>
+
+              <ion-button fill="clear" (click)="editCategory(cat)">
+                ✏️
+              </ion-button>
+
+              <ion-button
+                fill="clear"
+                color="danger"
+                (click)="deleteCategory(cat.id)">
+                🗑
+              </ion-button>
+
+            </ion-item>
+
+          </ion-list>
+
+        </ion-card-content>
+
+      </ion-card>
+
+    </div>
+
+  </div>
+
 </ion-content>
