@@ -1,6 +1,6 @@
 # TodoApp - Prueba Técnica Mobile Developer
 
-Aplicación híbrida desarrollada con Ionic + Angular + Capacitor para la gestión de tareas (To-Do List), con soporte de categorías, filtros dinámicos, almacenamiento local y feature flags mediante Firebase Remote Config.
+Aplicación híbrida desarrollada con **Ionic + Angular + Capacitor** para la gestión de tareas (To-Do List), incluyendo categorización de tareas, filtros dinámicos, almacenamiento local y feature flags mediante Firebase Remote Config.
 
 ---
 
@@ -16,6 +16,10 @@ Disponible en Releases del repositorio:
 
 https://github.com/j1217/todoapp/releases
 
+## 💻 Repositorio Fuente
+
+https://github.com/j1217/todoapp
+
 ---
 
 # 🚀 Tecnologías Utilizadas
@@ -27,8 +31,10 @@ https://github.com/j1217/todoapp/releases
 - Firebase Remote Config
 - RxJS
 - LocalStorage
-- HTML + SCSS
+- HTML5
+- SCSS
 - Android Studio
+- Git / GitHub
 
 ---
 
@@ -39,60 +45,57 @@ https://github.com/j1217/todoapp/releases
 - Crear nuevas tareas
 - Marcar tareas como completadas
 - Eliminar tareas
-- Persistencia local automática
-- Estado reactivo con RxJS
+- Persistencia automática en almacenamiento local
 
 ## Gestión de Categorías
 
 - Crear categorías
 - Editar categorías
 - Eliminar categorías
-- Asignar categoría a tareas
-- Visualización por categoría
+- Asignar categoría a cada tarea
 
 ## Filtros Dinámicos
 
 - Ver todas las tareas
-- Filtrar por categoría
+- Filtrar por categoría específica
 - Filtrar tareas sin categoría
 
 ## Firebase Remote Config
 
-Feature flag implementado:
+Se implementó el feature flag:
 
 enable_categories
 
-Permite activar o desactivar la funcionalidad de categorías sin publicar una nueva versión de la app.
+Este permite activar o desactivar toda la funcionalidad de categorías sin necesidad de desplegar una nueva versión de la aplicación.
 
 ---
 
-# ⚡ Mejoras Técnicas Aplicadas
+# ⚡ Optimización de Rendimiento Aplicada
 
-## Arquitectura Standalone Angular
+## Carga Inicial
 
-Uso de componentes standalone modernos para mejor rendimiento y menor acoplamiento.
+- Uso de Angular Standalone Components
+- Bootstrap moderno sin módulos innecesarios
+- Menor sobrecarga inicial
 
-## Reactive Programming
+## Manejo de Grandes Cantidades de Tareas
 
-Uso de:
+- Estado reactivo con RxJS
+- Uso de combineLatest
+- Filtrado eficiente en memoria
 
-- Observable
-- BehaviorSubject
-- combineLatest
-- map
-
-## Optimización UI
+## Minimización de Uso de Memoria
 
 - ChangeDetectionStrategy.OnPush
-- trackBy en listas
-- AlertController nativo Ionic
-- Diseño responsive mobile-first
+- Renderizado inteligente
+- trackBy en listas dinámicas
 
-## Integración Android
+## Experiencia de Usuario
 
-- APK generada con Capacitor
-- Build nativa en Android Studio
-- Compatible con dispositivos Android reales
+- Componentes nativos Ionic
+- Diseño mobile-first
+- AlertController para acciones críticas
+- UI responsive en Android
 
 ---
 
@@ -128,66 +131,107 @@ Proyecto nativo Android generado con Capacitor
 
 ---
 
-# ▶️ Ejecutar Proyecto Localmente
+# ▶️ Ejecución Local
 
 ## Instalar dependencias
 
 npm install
 
-## Ejecutar en navegador
+## Ejecutar versión web
 
 ionic serve
 
 ---
 
-# 📦 Ejecutar Android
+# 📱 Ejecución Android
 
 ionic build
 
 npx cap copy android
 
-npx cap open android
-
-o desde terminal:
-
 npx cap run android
 
 ---
 
-# 🔧 Generar APK
+# 📦 Generación APK
 
-Desde carpeta android:
+Desde la carpeta android:
 
 gradlew.bat assembleDebug
 
-Ruta resultante:
+Ruta generada:
 
 android/app/build/outputs/apk/debug/app-debug.apk
 
 ---
 
-# 🍎 iOS
+# 🍎 Soporte iOS
 
-Compatible mediante Capacitor iOS.
+El proyecto quedó preparado para compilación en iOS mediante Capacitor.
 
-Requiere:
+Requisitos para generar IPA:
 
 - macOS
 - Xcode
 - Apple Developer Account
 
+Debido a que el desarrollo se realizó sobre entorno Windows, no fue posible generar el archivo IPA final en esta etapa.
+
 ---
 
 # 🧠 Decisiones Técnicas
 
-Se utilizó Capacitor en lugar de Cordova por:
+## Uso de Capacitor en lugar de Cordova
 
-- Mejor soporte moderno
+Aunque el enunciado menciona Cordova, se implementó la solución con Capacitor por ser la tecnología moderna oficialmente recomendada por Ionic, ofreciendo:
+
 - Mejor integración nativa
-- Mejor rendimiento
-- Mantenimiento activo oficial de Ionic
+- Mejor mantenimiento
+- Mayor compatibilidad futura
+- Mejor experiencia de desarrollo
 
-Se utilizó Firebase Remote Config para permitir cambios funcionales sin redeploy.
+## Firebase Remote Config
+
+Permite activar funcionalidades dinámicamente sin redeploy de la aplicación.
+
+---
+
+# 📝 Respuestas Solicitadas
+
+## ¿Cuáles fueron los principales desafíos enfrentados?
+
+- Integración de Firebase Remote Config dentro del flujo reactivo.
+- Configuración de build Android y generación del APK.
+- Ajuste de componentes Ionic standalone para compatibilidad moderna.
+- Mantener buena experiencia de usuario mientras se agregaban nuevas funcionalidades.
+
+## ¿Qué técnicas de optimización de rendimiento aplicaste y por qué?
+
+- ChangeDetectionStrategy.OnPush para reducir renderizados innecesarios.
+- trackBy en listas para mejorar performance con múltiples tareas.
+- RxJS para manejo reactivo y eficiente del estado.
+- Componentes standalone para reducir carga inicial.
+
+## ¿Cómo aseguraste la calidad y mantenibilidad del código?
+
+- Separación por features.
+- Servicios desacoplados.
+- Código tipado con TypeScript.
+- Estructura escalable.
+- Componentes reutilizables.
+- Nombres claros y organización modular.
+
+---
+
+# ✅ Estado Final del Proyecto
+
+- Aplicación funcional
+- APK Android generada
+- Firebase integrado
+- Remote Config funcionando
+- Repositorio GitHub público
+- Video demostrativo disponible
+- Listo para evaluación técnica
 
 ---
 
@@ -195,15 +239,7 @@ Se utilizó Firebase Remote Config para permitir cambios funcionales sin redeplo
 
 Juan Felipe Acevedo Zapata
 
-GitHub: https://github.com/j1217
+GitHub:
+https://github.com/j1217
 
 Desarrollador .NET / Mobile Developer
-
----
-
-# 📌 Estado del Proyecto
-
-✅ Funcional  
-✅ APK generada  
-✅ Repositorio GitHub activo  
-✅ Listo para evaluación técnica
